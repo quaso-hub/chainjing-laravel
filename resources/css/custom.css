@@ -1,0 +1,10 @@
+.navbar-header {
+    background-color: #ffffff !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    z-index: 1030;
+}
+
+.page-inner {
+    padding-top: 2rem !important;
+    margin-top: 1rem !important;
+}
