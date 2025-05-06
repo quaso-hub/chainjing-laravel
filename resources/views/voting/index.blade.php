@@ -40,14 +40,9 @@
                             <td>{{ $vote->ruu->judul ?? '-' }}</td>
                             <td>{{ $vote->user->nama ?? '-' }}</td>
                             <td>
-                                <span class="badge {{ $vote->hasil === 'SETUJU' ? 'bg-success' : 'bg-danger' }}">
-                                    {{ $vote->hasil }}
-                                </span>
-                            </td>
-                            <td>
                                 <span class="badge
-                                    {{ $vote->hasil === 'SETUJU' ? 'bg-success' : ($vote->pilihan === 'TOLAK' ? 'bg-danger' : 'bg-warning text-dark') }}">
-                                    {{ $vote->pilihan }}
+                                    {{ $vote->hasil === 'SETUJU' ? 'bg-success' : ($vote->hasil === 'TOLAK' ? 'bg-danger' : 'bg-warning text-dark') }}">
+                                    {{ $vote->hasil }}
                                 </span>
                             </td>
 
