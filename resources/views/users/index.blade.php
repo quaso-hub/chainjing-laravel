@@ -87,9 +87,6 @@
                 @foreach ($jabatans as $jb)
                     <option value="{{ $jb->id }}">{{ $jb->nama }}</option>
                 @endforeach
-                <!-- <option value="1">Admin</option>
-                <option value="2">Anggota</option>
-                <option value="3">Publik</option> -->
             </select>
         </div>
     </x-modal-create>
@@ -112,9 +109,6 @@
                 @foreach ($jabatans as $jb)
                     <option value="{{ $jb->id }}">{{ $jb->nama }}</option>
                 @endforeach
-                <!-- <option value="1">Admin</option>
-                <option value="2">Anggota</option>
-                <option value="3">Publik</option> -->
             </select>
         </div>
     </x-modal-edit>

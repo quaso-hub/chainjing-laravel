@@ -15,6 +15,7 @@ return new class extends Migration
             $table->string('nama_program');
             $table->decimal('jumlah', 15, 2);
             $table->date('tanggal');
+            $table->text('keterangan');
             $table->timestamps();
         });
     }

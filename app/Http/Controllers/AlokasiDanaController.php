@@ -21,10 +21,10 @@ class AlokasiDanaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'nama_kegiatan' => 'required|string|max:255',
+            'nama_program' => 'required|string|max:255',
             'jumlah' => 'required|numeric',
             'tanggal' => 'required|date',
-            'keterangan' => 'nullable|string',
+            'keterangan' => 'required|string',
         ]);
 
         $alokasi = AlokasiDana::create($request->all());
@@ -47,7 +47,7 @@ class AlokasiDanaController extends Controller
     public function update(Request $request, AlokasiDana $alokasi_dana)
     {
         $request->validate([
-            'nama_kegiatan' => 'required|string|max:255',
+            'nama_program' => 'required|string|max:255',
             'jumlah' => 'required|numeric',
             'tanggal' => 'required|date',
             'keterangan' => 'nullable|string',
