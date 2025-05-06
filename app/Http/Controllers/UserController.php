@@ -14,7 +14,9 @@ class UserController extends Controller
         // $data = User::with('jabatan')->get();
         // return view('users.index', compact('data'));
         $users = User::with('jabatan')->get();
-        return view('users.index', compact('users'));
+        $jabatans = Jabatan::all();
+
+        return view('users.index', compact('users',"jabatans"));
     }
 
     public function create()
@@ -31,7 +33,6 @@ class UserController extends Controller
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6'
         ]);
-
         $request['password'] = Hash::make($request->password);
         User::create($request->all());
 
@@ -54,12 +55,12 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $request->validate([
-            'name' => 'required',
+            'nama' => 'required',
             'email' => 'required|email|unique:users,email,' . $user->id,
             'jabatan_id' => 'required',
         ]);
 
-        $user->update($request->only('name', 'email', 'jabatan_id'));
+        $user->update($request->only('nama', 'email', 'jabatan_id'));
 
         return response()->json(['message' => 'Berhasil update user']);
     }

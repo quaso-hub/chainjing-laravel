@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('alamat', 45)->nullable();
             $table->string('email', 45)->unique();
             $table->string('password', 255);
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
         });
     }
 

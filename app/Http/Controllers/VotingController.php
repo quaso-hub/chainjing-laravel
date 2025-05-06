@@ -47,7 +47,7 @@ class VotingController extends Controller
         ]);
 
         Voting::create($request->all());
-        return redirect()->route('voting.index')->with('success', 'Voting berhasil ditambahkan');
+        return redirect()->route('voting.vote')->with('success', 'Voting berhasil ditambahkan');
     }
 
     public function show($id)

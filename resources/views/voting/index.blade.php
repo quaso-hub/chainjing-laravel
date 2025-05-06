@@ -44,6 +44,13 @@
                                     {{ $vote->hasil }}
                                 </span>
                             </td>
+                            <td>
+                                <span class="badge
+                                    {{ $vote->hasil === 'SETUJU' ? 'bg-success' : ($vote->pilihan === 'TOLAK' ? 'bg-danger' : 'bg-warning text-dark') }}">
+                                    {{ $vote->pilihan }}
+                                </span>
+                            </td>
+
                             <td>{{ $vote->created_at->translatedFormat('d M Y H:i') }}</td>
                             <td>
                                 <button type="button" class="btn btn-danger btn-sm delete-vote-btn"

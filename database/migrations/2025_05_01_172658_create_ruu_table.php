@@ -15,7 +15,7 @@ return new class extends Migration
             $table->string('judul', 45);
             $table->text('deskripsi');
             $table->enum('status', ['DRAFT', 'VOTING', 'DISAHKAN', 'DITOLAK']);
-            $table->timestamp('created_at')->useCurrent();
+            $table->timestamps();
         });
     }
 

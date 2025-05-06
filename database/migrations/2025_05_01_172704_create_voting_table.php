@@ -14,7 +14,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('users_id')->constrained('users');
             $table->foreignId('ruu_id')->constrained('ruu');
-            $table->enum('pilihan', ['SETUJU', 'TOLAK']);
+            $table->enum('pilihan', ['SETUJU', 'TOLAK',"ABSTAIN"]);
             $table->timestamp('waktu_vote')->nullable();
             $table->string('voting_hash', 100)->nullable();
             $table->timestamps();
