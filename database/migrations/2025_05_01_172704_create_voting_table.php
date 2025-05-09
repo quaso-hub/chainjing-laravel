@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void {
         Schema::create('voting', function (Blueprint $table) {
             $table->id();
+            $table->string('vote_id')->unique();
             $table->foreignId('users_id')->constrained('users');
             $table->foreignId('ruu_id')->constrained('ruu');
             $table->enum('pilihan', ['SETUJU', 'TOLAK',"ABSTAIN"]);

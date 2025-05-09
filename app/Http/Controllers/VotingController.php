@@ -7,6 +7,7 @@ use App\Models\Voting;
 use App\Models\RUU;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 
 class VotingController extends Controller
 {
@@ -41,14 +42,41 @@ class VotingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'users_id' => 'required',
-            'ruu_id' => 'required',
-            'pilihan' => 'required',
+            'users_id' => 'required|exists:users,id',
+            'ruu_id' => 'required|exists:ruu,id',
+            'pilihan' => 'required|in:SETUJU,TOLAK,ABSTAIN',
         ]);
 
-        Voting::create($request->all());
-        return redirect()->route('voting.vote')->with('success', 'Voting berhasil ditambahkan');
+        try {
+            $vote = new Voting();
+            $vote->vote_id = uniqid('vote_'); // Buat ID unik
+            $vote->users_id = $request->users_id;
+            $vote->ruu_id = $request->ruu_id;
+            $vote->pilihan = $request->pilihan;
+            $vote->waktu_vote = now(); // Isi waktu voting sekarang
+            $vote->save();
+
+            $response = Http::post('http://localhost:3000/api/vote', [
+                'vote_id' => $vote->vote_id,
+                'anggota_id' => $vote->users_id,
+                'ruu_id' => $vote->ruu_id,
+                'pilihan' => $vote->pilihan,
+                'timestamp' => now()->toIso8601String(),
+            ]);
+
+            \Log::info('Blockchain response:', ['body' => $response->body()]);
+
+            if ($response->successful()) {
+                return back()->with('success', 'Vote berhasil disimpan dan dikirim ke blockchain ✔️');
+            } else {
+                return back()->with('error', 'Vote tersimpan di DB, tapi gagal dikirim ke blockchain ❌');
+            }
+        } catch (\Exception $e) {
+            \Log::error('Vote Gagal:', ['message' => $e->getMessage()]);
+            return back()->with('error', 'Terjadi kesalahan saat vote: ' . $e->getMessage());
+        }
     }
+
 
     public function show($id)
     {

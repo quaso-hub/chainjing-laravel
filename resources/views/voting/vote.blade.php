@@ -62,19 +62,15 @@
                                         @if (!$ruu->voting->where('users_id', auth()->id())->count())
                                             <form action="{{ route('voting.store') }}" method="POST">
                                                 @csrf
-                                                <form action="{{ route('voting.store') }}" method="POST">
-                                                    @csrf
-                                                    <input type="hidden" name="users_id" value="{{ auth()->id() }}">
-                                                    <input type="hidden" name="ruu_id" value="{{ $ruu->id }}">
+                                                <input type="hidden" name="users_id" value="{{ auth()->id() }}">
+                                                <input type="hidden" name="ruu_id" value="{{ $ruu->id }}">
 
-                                                    <button name="pilihan" value="SETUJU"
-                                                        class="btn btn-success btn-sm">Setuju</button>
-                                                    <button name="pilihan" value="TOLAK"
-                                                        class="btn btn-danger btn-sm">Tolak</button>
-                                                    <button name="pilihan" value="ABSTAIN"
-                                                        class="btn btn-secondary btn-sm">Abstain</button>
-                                                </form>
-
+                                                <button name="pilihan" value="SETUJU"
+                                                    class="btn btn-success btn-sm">Setuju</button>
+                                                <button name="pilihan" value="TOLAK"
+                                                    class="btn btn-danger btn-sm">Tolak</button>
+                                                <button name="pilihan" value="ABSTAIN"
+                                                    class="btn btn-secondary btn-sm">Abstain</button>
                                             </form>
                                         @else
                                             <span class="text-success">Sudah Memilih</span>
