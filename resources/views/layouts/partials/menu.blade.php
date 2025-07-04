@@ -4,10 +4,12 @@
 
     $dashboardRoute = match (Auth::user()->jabatan_id) {
         1 => 'dashboard.admin',
-        2 => 'dashboard.anggota',
+        2, 4, 5 => 'dashboard.anggota',
         3 => 'dashboard.publik',
+
         default => 'dashboard.admin',
     };
+    $isParlemen = in_array(Auth::user()->jabatan_id, [2, 4, 5]);
 @endphp
 
 <ul class="nav nav-secondary">
@@ -57,16 +59,28 @@
                 <p>Jabatan</p>
             </a>
         </li>
+    @endif
+    @if ($isParlemen)
+        {{-- Pimpinan & Bendahara melihat 'RUU Management', Anggota biasa melihat 'Daftar RUU' --}}
+        @if (in_array(Auth::user()->jabatan_id, [4, 5]))
+            {{-- 4=Pimpinan, 5=Bendahara --}}
+            <li class="nav-item {{ $activeLike('ruu') }}">
+                <a href="{{ route('ruu.index') }}">
+                    <i class="fas fa-gavel"></i>
+                    <p>RUU Management</p>
+                </a>
+            </li>
+        @else
+            {{-- Ini untuk Anggota biasa (jabatan_id 2) --}}
+            <li class="nav-item {{ $activeLike('ruu') }}">
+                <a href="{{ route('ruu.index') }}">
+                    <i class="fas fa-book"></i>
+                    <p>Daftar RUU</p>
+                </a>
+            </li>
+        @endif
 
-        {{-- Anggota (Jabatan 2) --}}
-    @elseif(Auth::user()->jabatan_id == 2)
-        <li class="nav-item {{ $activeLike('ruu') }}">
-            <a href="{{ route('ruu.index') }}">
-                <i class="fas fa-book"></i>
-                <p>Daftar RUU</p>
-            </a>
-        </li>
-        <li class="nav-item {{ $activeLike('voting') }}">
+        <li class="nav-item {{ $activeLike('voting/vote') }}">
             <a href="{{ route('voting.vote') }}">
                 <i class="fas fa-volume-off"></i>
                 <p>Berikan Suara</p>
@@ -84,9 +98,10 @@
                 <p>Riwayat Aktivitas</p>
             </a>
         </li>
+    @endif
 
-        {{-- Publik (Jabatan 3) --}}
-    @elseif(Auth::user()->jabatan_id == 3)
+    {{-- Menu Khusus Publik (Jabatan 3) --}}
+    @if (Auth::user()->jabatan_id == 3)
         <li class="nav-item {{ $active('ruu.publik') }}">
             <a href="{{ route('ruu.publik') }}">
                 <i class="fas fa-file-alt"></i>
@@ -94,4 +109,5 @@
             </a>
         </li>
     @endif
+
 </ul>

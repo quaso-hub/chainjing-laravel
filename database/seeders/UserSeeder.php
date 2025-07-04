@@ -28,7 +28,22 @@ class UserSeeder extends Seeder
                 'alamat' => 'Bandung',
                 'email' => 'anggota@example.com',
                 'password' => Hash::make('password')
+            ],
+            [
+                'nama' => 'Pimpinan Sidang',
+                'jabatan_id' => 4,
+                'alamat' => 'Jakarta',
+                'email' => 'pimpinan@example.com',
+                'password' => Hash::make('password'),
+            ],
+            [
+                'nama' => 'Bendahara',
+                'jabatan_id' => 5,
+                'alamat' => 'Bandung',
+                'email' => 'bendahara@example.com',
+                'password' => Hash::make('password'),
             ]
+
         ]);
     }
 }

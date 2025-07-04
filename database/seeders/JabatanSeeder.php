@@ -17,6 +17,8 @@ class JabatanSeeder extends Seeder
             ['nama' => 'Admin'],
             ['nama' => 'Anggota'],
             ['nama' => 'Publik'],
+            ['nama' => 'Pimpinan'],
+            ['nama' => 'Bendahara'],
         ]);
     }
 }

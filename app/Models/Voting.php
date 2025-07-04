@@ -8,7 +8,7 @@ class Voting extends Model
 {
     protected $table = 'voting';
 
-    protected $fillable = ['users_id', 'ruu_id', 'pilihan', 'waktu_vote', 'voting_hash'];
+    protected $fillable = ['vote_id', 'users_id', 'ruu_id', 'pilihan', 'waktu_vote', 'voting_hash'];
 
     public function user()
     {
@@ -19,5 +19,4 @@ class Voting extends Model
     {
         return $this->belongsTo(RUU::class, 'ruu_id');
     }
-
 }

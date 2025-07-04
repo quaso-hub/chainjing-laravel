@@ -9,10 +9,12 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void {
+    public function up(): void
+    {
         Schema::create('ruu', function (Blueprint $table) {
             $table->id();
-            $table->string('judul', 45);
+            $table->string('judul', 200);
+            $table->foreignId('user_id')->constrained('users');
             $table->text('deskripsi');
             $table->enum('status', ['DRAFT', 'VOTING', 'DISAHKAN', 'DITOLAK']);
             $table->timestamps();

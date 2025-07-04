@@ -2,7 +2,8 @@
 
 @section('content')
     <div class="page-inner">
-        <div class="page-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
+        <div
+            class="page-header d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2">
             <div>
                 <h4 class="page-title">Manajemen RUU</h4>
                 <nav aria-label="breadcrumb" class="d-inline-block ms-2">
@@ -42,11 +43,15 @@
             <input type="hidden" id="edit-id">
             <div class="mb-3">
                 <label for="edit-judul">Judul</label>
-                <input type="text" id="edit-judul" name="judul" class="form-control" required>
+                <input type="text" id="edit-judul" name="judul"
+                    class="form-control @if (Auth::user()->jabatan_id == 4) form-control-plaintext @endif" required
+                    @if (Auth::user()->jabatan_id == 4) disabled @endif>
             </div>
             <div class="mb-3">
                 <label for="edit-deskripsi">Deskripsi</label>
-                <textarea id="edit-deskripsi" name="deskripsi" class="form-control" required></textarea>
+                <textarea id="edit-deskripsi" name="deskripsi"
+                    class="form-control @if (Auth::user()->jabatan_id == 4) form-control-plaintext @endif" required
+                    @if (Auth::user()->jabatan_id == 4) disabled @endif></textarea>
             </div>
             <div class="mb-3">
                 <label for="edit-status">Status</label>
@@ -54,6 +59,17 @@
                     <option value="DRAFT">DRAFT</option>
                     <option value="VOTING">VOTING</option>
                 </select>
+            </div>
+
+            <div id="jadwal-voting" style="display: none;">
+                <div class="mb-3">
+                    <label for="edit-voting_mulai">Jadwal Mulai Voting</label>
+                    <input type="datetime-local" id="edit-voting_mulai" name="voting_mulai" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label for="edit-voting_selesai">Jadwal Selesai Voting</label>
+                    <input type="datetime-local" id="edit-voting_selesai" name="voting_selesai" class="form-control">
+                </div>
             </div>
         </x-modal-edit>
 
@@ -155,6 +171,14 @@
                 filterSelector: '#statusFilter',
                 tableContainer: '#ruu-table-container',
                 fetchUrl: "{{ route('ruu.index') }}"
+            });
+
+            $('#edit-status').on('change', function() {
+                if ($(this).val() === 'VOTING') {
+                    $('#jadwal-voting').show();
+                } else {
+                    $('#jadwal-voting').hide();
+                }
             });
         });
     </script>

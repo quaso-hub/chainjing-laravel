@@ -8,15 +8,21 @@ class RUU extends Model
 {
     protected $table = 'ruu';
 
-    protected $fillable = ['judul', 'deskripsi', 'status'];
+    protected $fillable = [
+        'judul',
+        'deskripsi',
+        'status',
+        'voting_mulai',
+        'voting_selesai',
+    ];
 
     public function voting()
     {
-        return $this->hasMany(Voting::class, 'ruu_id');
+        return $this->hasMany(Voting::class, 'ruu_id', 'id');
     }
 
     public function revisi()
     {
-        return $this->hasMany(RevisiRUU::class);
+        return $this->hasMany(RevisiRUU::class, 'ruu_id', 'id');
     }
 }

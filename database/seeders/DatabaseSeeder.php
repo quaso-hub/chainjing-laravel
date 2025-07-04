@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
             JabatanSeeder::class,
             UserSeeder::class,
             RUUSeeder::class,
+            RevisiRuuSeeder::class,
         ]);
     }
 }

@@ -52,73 +52,86 @@
     <section id="daftar-ruu" class="section mt-5">
         <div class="container" data-aos="fade-up">
 
-            <!-- Search -->
-            <div class="input-group mb-5 shadow-sm rounded-pill">
-                <input type="text" class="form-control border-0 py-3 ps-4 rounded-start-pill"
-                    placeholder="Cari RUU berdasarkan kata kunci…">
-                <button class="btn btn-primary px-4 rounded-end-pill">
-                    <i class="bi bi-search"></i> Cari
-                </button>
-            </div>
+            <!-- Search Form -->
+            <form action="{{ route('publik.dashboard') }}" method="GET">
+                <div class="input-group mb-5 shadow-sm rounded-pill">
+                    <input type="text" name="keyword" class="form-control border-0 py-3 ps-4 rounded-start-pill"
+                        placeholder="Cari RUU berdasarkan kata kunci…" value="{{ request('keyword') }}">
+                    <button type="submit" class="btn btn-primary px-4 rounded-end-pill">
+                        <i class="bi bi-search"></i> Cari
+                    </button>
+                </div>
+            </form>
 
             <div class="row">
-                <div class="col-lg-9">
-
+                <div class="col-lg-12">
                     <div class="row g-4">
-                        <!-- Loop RUU -->
-                        @for ($i = 1; $i <= 4; $i++)
+                        @forelse($ruus as $ruu)
                             <div class="col-md-6">
                                 <div class="card h-100 shadow-sm border-0">
                                     <div class="card-body">
-                                        <span class="badge bg-success mb-2">Aktif</span>
-                                        <h5 class="card-title">RUU Perlindungan Data Pribadi {{ $i }}</h5>
-                                        <p class="card-text text-muted small">Mengatur perlindungan data pribadi warga
-                                            negara terhadap penyalahgunaan informasi digital.</p>
-                                        <ul class="list-unstyled text-muted small">
-                                            <li><i class="bi bi-calendar-event me-2"></i>Diperbarui 25 Apr 2025</li>
-                                            <li><i class="bi bi-bar-chart me-2"></i>210 suara</li>
-                                            <li><i class="bi bi-pencil-square me-2"></i>5 revisi</li>
+                                        {{-- Logika Status Dinamis --}}
+                                        @if ($ruu->voting_mulai)
+                                            {{-- Cek dulu apakah jadwalnya ada --}}
+                                            @if (now()->between($ruu->voting_mulai, $ruu->voting_selesai))
+                                                <span class="badge bg-success mb-2">Aktif</span>
+                                            @else
+                                                <span class="badge bg-secondary mb-2">Selesai</span>
+                                            @endif
+                                        @else
+                                            {{-- Jika tidak ada jadwal, tampilkan status dari DB --}}
+                                            <span class="badge bg-info mb-2">{{ $ruu->status }}</span>
+                                        @endif
+
+                                        <h5 class="card-title">{{ $ruu->judul }}</h5>
+                                        <p class="card-text text-muted small">{{ Str::limit($ruu->deskripsi, 100) }}</p>
+
+                                        <ul class="list-unstyled text-muted small mt-3">
+                                            <li>
+                                                <i class="bi bi-calendar-event me-2"></i>
+                                                @if ($ruu->updated_at)
+                                                    {{ $ruu->updated_at->translatedFormat('d M Y') }}
+                                                @else
+                                                    -
+                                                @endif
+                                            </li>
+                                            <li>
+                                                <i class="bi bi-bar-chart me-2"></i>
+                                                {{ $ruu->voting_count }} suara masuk
+                                            </li>
+                                            <li>
+                                                <i class="bi bi-pencil-square me-2"></i>
+                                                {{ $ruu->revisi_count }} usulan revisi
+                                            </li>
                                         </ul>
-                                        <button class="btn btn-outline-primary btn-sm mt-2" data-bs-toggle="modal"
-                                            data-bs-target="#detailModal">Lihat Detail</button>
+
+                                        <button class="btn btn-outline-primary btn-sm mt-2 view-blockchain-btn"
+                                            data-bs-toggle="modal" data-bs-target="#blockchainDetailModal"
+                                            data-ruu-id="{{ $ruu->id }}" data-ruu-judul="{{ $ruu->judul }}">
+                                            <i class="bi-shield-check"></i> Verifikasi Blockchain
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-                        @endfor
+                        @empty
+                            <div class="col-12 text-center py-5">
+                                <i class="bi bi-search display-4 text-muted"></i>
+                                <h5 class="mt-3">RUU tidak ditemukan</h5>
+                                <p class="text-muted">Tidak ada RUU yang cocok dengan kriteria pencarian Anda.</p>
+                                <a href="{{ route('publik.dashboard') }}">Tampilkan semua RUU</a>
+                            </div>
+                        @endforelse
                     </div>
 
-                    <!-- View More Button -->
-                    <div class="text-center mt-5">
-                        <button class="btn btn-outline-dark rounded-pill px-4 py-2" data-bs-toggle="modal"
-                            data-bs-target="#viewMoreModal">
-                            <i class="bi bi-three-dots"></i> Lihat Lebih Banyak
-                        </button>
-                    </div>
-
-                </div>
-
-                <!-- Sidebar RUU Populer -->
-                <div class="col-lg-3">
-                    <div class="bg-white p-4 rounded-4 shadow-sm">
-                        <h6 class="fw-bold mb-3"><i class="bi bi-stars me-2 text-warning"></i>RUU Populer</h6>
-                        <ul class="list-unstyled small text-muted">
-                            <li class="d-flex justify-content-between align-items-center mb-3">
-                                <span>Digitalisasi Pemerintah</span>
-                                <span class="badge rounded-pill bg-primary">350</span>
-                            </li>
-                            <li class="d-flex justify-content-between align-items-center mb-3">
-                                <span>Perlindungan Konsumen</span>
-                                <span class="badge rounded-pill bg-primary">290</span>
-                            </li>
-                            <li class="d-flex justify-content-between align-items-center">
-                                <span>Energi Terbarukan</span>
-                                <span class="badge rounded-pill bg-primary">255</span>
-                            </li>
-                        </ul>
+                    <!-- Pagination Links -->
+                    <div class="mt-5 d-flex justify-content-center">
+                        {{ $ruus->withQueryString()->links() }}
                     </div>
                 </div>
             </div>
         </div>
+
+
     </section>
 
     <!-- Modal: Lihat Lebih Banyak -->
@@ -630,16 +643,108 @@
 
 
 
+    <!-- MODAL SINGLE UNTUK TAMPILAN DATA BLOCKCHAIN -->
+    <div class="modal fade" id="blockchainDetailModal" tabindex="-1" aria-labelledby="blockchainDetailModalLabel"
+        aria-hidden="true">
+        {{-- ... Isi modal tidak berubah ... --}}
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="blockchainDetailModalLabel">Memuat Data...</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="blockchain-data-container">
+                    {{-- Konten akan diisi oleh JavaScript --}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+@endsection
 
 
 
 
 
 
+@push('scripts')
+    <script>
+        $(document).ready(function() {
+            // Event listener untuk semua tombol dengan class '.view-blockchain-btn'
+            $('.view-blockchain-btn').on('click', function() {
+                console.log("Tombol Verifikasi Ditekan! RUU ID:", $(this).data('ruu-id'));
 
+                // Ambil data dari tombol yang diklik
+                const ruuId = $(this).data('ruu-id');
+                const ruuJudul = $(this).data('ruu-judul');
+                const modalContainer = $('#blockchain-data-container');
+                const modalTitle = $('#blockchainDetailModalLabel');
 
-    @push('scripts')
-        <script>
+                // 1. Set judul modal dan tampilkan loading spinner
+                modalTitle.text('Data Vote untuk: ' + ruuJudul);
+                modalContainer.html(`
+                <div class="d-flex justify-content-center my-5">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <strong class="ms-3">Menarik data dari Blockchain...</strong>
+                </div>
+            `);
+
+                // 2. Buat AJAX call ke controller Laravel kita
+                $.ajax({
+                    url: `/audit/ruu/${ruuId}/votes`,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(data) {
+                        let tableHtml = `
+                        <p class="text-muted small">Data berikut diambil langsung dari ledger blockchain yang tidak dapat diubah (immutable) untuk menjamin transparansi.</p>
+                        <table class="table table-sm table-striped table-bordered">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Vote ID</th>
+                                    <th>Pilihan</th>
+                                    <th>Timestamp</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                        if (data.length > 0) {
+                            data.forEach(vote => {
+                                tableHtml += `
+                                <tr>
+                                    <td class="small text-monospace" style="word-break: break-all;">${vote.ID}</td>
+                                    <td>${vote.Pilihan}</td>
+                                    <td>${new Date(vote.Timestamp).toLocaleString('id-ID')}</td>
+                                </tr>
+                            `;
+                            });
+                        } else {
+                            tableHtml +=
+                                '<tr><td colspan="3" class="text-center">Belum ada data vote di blockchain untuk RUU ini.</td></tr>';
+                        }
+
+                        tableHtml += '</tbody></table>';
+                        modalContainer.html(tableHtml);
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error("AJAX Error:", jqXHR.responseJSON);
+                        const errorMsg = jqXHR.responseJSON?.message || 'Gagal memuat data.';
+                        modalContainer.html(`
+                        <div class="alert alert-danger text-center">
+                            <h5>Terjadi Kesalahan</h5>
+                            <p>${errorMsg}</p>
+                        </div>
+                    `);
+                    }
+                });
+            });
+
             function showDetailRUU(judul, status, deskripsi, dibuat, voting, revisi) {
                 document.getElementById('detailJudul').textContent = judul;
                 document.getElementById('detailStatus').textContent = status;
@@ -657,6 +762,6 @@
                     item.style.display = text.includes(keyword) ? 'block' : 'none';
                 });
             });
-        </script>
-    @endpush
-@endsection
+        });
+    </script>
+@endpush

@@ -41,39 +41,72 @@ class VotingController extends Controller
 
     public function store(Request $request)
     {
+        // 1. Validasi input dasar dari form
         $request->validate([
-            'users_id' => 'required|exists:users,id',
             'ruu_id' => 'required|exists:ruu,id',
             'pilihan' => 'required|in:SETUJU,TOLAK,ABSTAIN',
         ]);
 
-        try {
-            $vote = new Voting();
-            $vote->vote_id = uniqid('vote_'); // Buat ID unik
-            $vote->users_id = $request->users_id;
-            $vote->ruu_id = $request->ruu_id;
-            $vote->pilihan = $request->pilihan;
-            $vote->waktu_vote = now(); // Isi waktu voting sekarang
-            $vote->save();
+        $user = Auth::user();
+        $ruu = RUU::findOrFail($request->ruu_id);
 
-            $response = Http::post('http://localhost:3000/api/vote', [
-                'vote_id' => $vote->vote_id,
-                'anggota_id' => $vote->users_id,
-                'ruu_id' => $vote->ruu_id,
-                'pilihan' => $vote->pilihan,
-                'timestamp' => now()->toIso8601String(),
+        // 2. Logika Pengecekan Bisnis
+        // Cek apakah RUU statusnya VOTING
+        if ($ruu->status !== 'VOTING') {
+            return back()->with('error', 'RUU ini tidak sedang dalam sesi voting.');
+        }
+
+        // Cek apakah sesi voting sedang aktif (berdasarkan jadwal)
+        if (!$ruu->voting_mulai || !now()->between($ruu->voting_mulai, $ruu->voting_selesai)) {
+            return back()->with('error', 'Sesi voting untuk RUU ini belum dimulai atau telah berakhir.');
+        }
+
+        // Cek apakah user sudah pernah vote untuk RUU ini
+        $existingVote = Voting::where('users_id', $user->id)
+            ->where('ruu_id', $ruu->id)
+            ->first();
+
+        if ($existingVote) {
+            return back()->with('error', 'Anda sudah pernah memberikan suara untuk RUU ini.');
+        }
+
+        // 3. Proses Penyimpanan jika semua pengecekan lolos
+        try {
+            $vote_id = uniqid('vote_');
+            $timestamp = now();
+
+            // Simpan ke database lokal
+            Voting::create([
+                'vote_id' => $vote_id,
+                'users_id' => $user->id,
+                'ruu_id' => $request->ruu_id,
+                'pilihan' => $request->pilihan,
+                'waktu_vote' => $timestamp,
             ]);
 
-            \Log::info('Blockchain response:', ['body' => $response->body()]);
+            // Data untuk dikirim ke blockchain
+            $blockchainData = [
+                'vote_id' => $vote_id,
+                'anggota_id' => (string)$user->id,
+                'ruu_id' => (string)$request->ruu_id,
+                'pilihan' => $request->pilihan,
+                'timestamp' => $timestamp->toIso8601String(),
+            ];
+
+            // Kirim ke Node.js API
+            $response = Http::post('http://localhost:3000/api/vote', $blockchainData);
+
+            // Log response untuk debugging
+            // Log::info('Blockchain response:', ['body' => $response->body()]);
 
             if ($response->successful()) {
-                return back()->with('success', 'Vote berhasil disimpan dan dikirim ke blockchain ✔️');
+                return back()->with('success', 'Suara berhasil disimpan dan dicatat di blockchain ✔️');
             } else {
-                return back()->with('error', 'Vote tersimpan di DB, tapi gagal dikirim ke blockchain ❌');
+                return back()->with('warning', 'Vote tersimpan di database, tapi gagal dicatat di blockchain. Error: ' . $response->json('error', 'Unknown Error'));
             }
         } catch (\Exception $e) {
-            \Log::error('Vote Gagal:', ['message' => $e->getMessage()]);
-            return back()->with('error', 'Terjadi kesalahan saat vote: ' . $e->getMessage());
+            // Log::error('Vote Gagal Total:', ['message' => $e->getMessage()]);
+            return back()->with('error', 'Terjadi kesalahan sistem saat menyimpan suara: ' . $e->getMessage());
         }
     }
 

@@ -43,7 +43,7 @@ class LoginController extends Controller
     {
         return match ($user->jabatan_id) {
             1 => redirect('/dashboard/admin'),
-            2 => redirect('/dashboard/anggota'),
+            2, 4, 5 => redirect('/dashboard/anggota'),
             default => redirect('/dashboard/publik'),
         };
     }

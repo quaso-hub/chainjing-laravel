@@ -12,6 +12,7 @@ class RevisiRUU extends Model
         'user_id',
         'ruu_id',
         'alasan',
+        'status',
     ];
 
 
