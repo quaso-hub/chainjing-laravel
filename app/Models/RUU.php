@@ -11,6 +11,7 @@ class RUU extends Model
     protected $fillable = [
         'judul',
         'deskripsi',
+        'user_id',
         'status',
         'voting_mulai',
         'voting_selesai',

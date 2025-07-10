@@ -21,6 +21,7 @@ use App\Models\RevisiRUU;
 
 Route::get('/', [PublicDashboardController::class, 'index'])->name('publik.dashboard');
 Route::get('/audit/ruu/{ruuId}/votes', [BlockchainAuditController::class, 'getVotes'])->name('blockchain.getVotes');
+Route::get('/audit/alokasi-dana/{alokasiId}', [BlockchainAuditController::class, 'getAlokasiDana'])->name('blockchain.getAlokasiDana');
 Auth::routes();
 
 // -------------------- DASHBOARD --------------------
@@ -77,7 +78,6 @@ Route::middleware(['auth', CekJabatan::class . ':5'])->group(function () {
     // HANYA UPDATE DAN DELETE YANG KHUSUS ADMIN & PIMPINAN
     Route::resource('alokasi_dana', AlokasiDanaController::class);
     Route::post('alokasi_dana/{alokasi_dana}/record', [AlokasiDanaController::class, 'recordToBlockchain'])->name('alokasi_dana.record');
-    Route::get('/audit/alokasi-dana/{alokasiId}', [BlockchainAuditController::class, 'getAlokasiDana'])->name('blockchain.getAlokasiDana');
 });
 
 // -------------------- ADMIN + ANGGOTA + PIMPINAN + BENDAHARA (jabatan_id = 1,2,4,5) --------------------

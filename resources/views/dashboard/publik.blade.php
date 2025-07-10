@@ -134,80 +134,6 @@
 
     </section>
 
-    <!-- Modal: Lihat Lebih Banyak -->
-    <div class="modal fade" id="viewMoreModal" tabindex="-1" aria-labelledby="viewMoreModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Daftar RUU Lainnya</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row g-3">
-                        @for ($i = 5; $i <= 15; $i++)
-                            <div class="col-md-6">
-                                <div class="card border-0 shadow-sm">
-                                    <div class="card-body small">
-                                        <span class="badge bg-secondary mb-1">Selesai</span>
-                                        <h6 class="mb-1">RUU Kesejahteraan Sosial {{ $i }}</h6>
-                                        <p class="text-muted mb-1">Deskripsi singkat RUU ke-{{ $i }}.</p>
-                                        <small class="text-muted d-block"><i class="bi bi-bar-chart"></i> 100 suara &nbsp;
-                                            <i class="bi bi-pencil-square"></i> 2 revisi</small>
-
-                                        <button class="btn btn-sm btn-outline-primary mt-2" data-bs-toggle="modal"
-                                            data-bs-target="#detailModal" data-bs-dismiss="" {{-- tidak menutup modal utama --}}
-                                            onclick="showDetailRUU('RUU Kesejahteraan Sosial {{ $i }}', 'Selesai', 'Deskripsi lengkap RUU ke-{{ $i }}.', '20 Apr 2025', 100, 2)">
-                                            Lihat Detail
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        @endfor
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <!-- Modal: Lihat Detail -->
-    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Detail RUU</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body small text-muted">
-                    <p><strong>Judul:</strong> <span id="detailJudul"></span></p>
-                    <p><strong>Status:</strong> <span id="detailStatus"></span></p>
-                    <p><strong>Deskripsi:</strong> <span id="detailDeskripsi"></span></p>
-                    <p><strong>Dibuat:</strong> <span id="detailDibuat"></span></p>
-                    <p><strong>Jumlah Voting:</strong> <span id="detailVoting"></span></p>
-                    <p><strong>Jumlah Revisi:</strong> <span id="detailRevisi"></span></p>
-                    <hr>
-                    <p><strong>Catatan Tambahan:</strong> Usulan revisi akan ditutup pada <span
-                            class="fw-semibold text-dark">1 Mei 2025</span>. Publik dapat menyampaikan tanggapan hingga
-                        tanggal tersebut.</p>
-                    <p><strong>Regulasi Terkait:</strong> Pasal 5 KUHP, UU ITE No. 11 Tahun 2008, dan peraturan pelaksana
-                        lainnya.</p>
-                    <p><strong>Institusi Terkait:</strong> Kementerian Kominfo, DPR Komisi I, dan Lembaga Perlindungan Data
-                        Nasional.</p>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-
-
-
-
-
-
-
-
-
     <!-- Section: Voting Summary -->
     <section id="voting" class="section py-5 bg-light border-top">
         <div class="container" data-aos="fade-up">
@@ -232,55 +158,32 @@
                         </tr>
                     </thead>
                     <tbody class="bg-white">
-                        <!-- RUU Aktif -->
-                        <tr>
-                            <td>
-                                <strong>RUU Pendidikan Nasional</strong>
-                                <div class="small text-muted">Mengatur standar pendidikan dan kurikulum nasional.</div>
-                            </td>
-                            <td class="text-center text-success fw-semibold">85</td>
-                            <td class="text-center text-danger fw-semibold">15</td>
-                            <td class="text-center">100</td>
-                            <td class="text-center"><span class="badge bg-success">Aktif</span></td>
-                        </tr>
-                        <tr>
-                            <td colspan="5">
-                                <div class="progress rounded-pill" style="height: 18px;">
-                                    <div class="progress-bar bg-success" style="width: 85%">Setuju 85%</div>
-                                    <div class="progress-bar bg-danger" style="width: 15%">Tidak 15%</div>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td>
-                                <strong>RUU Teknologi & Data</strong>
-                                <div class="small text-muted">Menjamin keamanan data pribadi dalam dunia digital.</div>
-                            </td>
-                            <td class="text-center text-success fw-semibold">52</td>
-                            <td class="text-center text-danger fw-semibold">48</td>
-                            <td class="text-center">100</td>
-                            <td class="text-center"><span class="badge bg-success">Aktif</span></td>
-                        </tr>
-                        <tr>
-                            <td colspan="5">
-                                <div class="progress rounded-pill" style="height: 18px;">
-                                    <div class="progress-bar bg-success" style="width: 52%">Setuju 52%</div>
-                                    <div class="progress-bar bg-danger" style="width: 48%">Tidak 48%</div>
-                                </div>
-                            </td>
-                        </tr>
-
-                        <!-- RUU Selesai -->
-                        <tr>
-                            <td>
-                                <strong>RUU Kesejahteraan Sosial</strong>
-                                <div class="small text-muted">Fokus pada perlindungan sosial dan kesejahteraan masyarakat
-                                    rentan.</div>
-                            </td>
-                            <td colspan="3" class="text-center text-muted">Voting Ditutup</td>
-                            <td class="text-center"><span class="badge bg-secondary">Selesai</span></td>
-                        </tr>
+                        @forelse($votingTop3 as $v)
+                            <tr>
+                                <td>
+                                    <strong>{{ $v['judul'] }}</strong>
+                                    <div class="small text-muted">{{ Str::limit($v['deskripsi'], 100) }}</div>
+                                </td>
+                                <td class="text-center text-success fw-semibold">{{ $v['setuju'] }}</td>
+                                <td class="text-center text-danger fw-semibold">{{ $v['tidak'] }}</td>
+                                <td class="text-center">{{ $v['total'] }}</td>
+                                <td class="text-center"><span class="badge bg-success">Aktif</span></td>
+                            </tr>
+                            <tr>
+                                <td colspan="5">
+                                    <div class="progress rounded-pill" style="height: 18px;">
+                                        <div class="progress-bar bg-success" style="width: {{ $v['persen_setuju'] }}%">
+                                            Setuju {{ $v['persen_setuju'] }}%</div>
+                                        <div class="progress-bar bg-danger" style="width: {{ $v['persen_tidak'] }}%">
+                                            Tidak {{ $v['persen_tidak'] }}%</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">Belum ada voting aktif.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -311,183 +214,27 @@
                 <div class="modal-body small">
                     <input type="text" class="form-control mb-4" placeholder="Cari RUU...">
                     <ul class="list-group list-group-flush">
-                        @for ($i = 1; $i <= 10; $i++)
+                        @forelse($votingSummary as $v)
                             <li class="list-group-item">
-                                <strong>RUU Digital {{ $i }}</strong>
-                                <div class="text-muted small mb-2">Voting saat ini: <strong>Setuju:
-                                        {{ 40 + $i }}%</strong>, Tidak Setuju: {{ 60 - $i }}%</div>
-                                <div class="progress mb-2" style="height: 8px;">
-                                    <div class="progress-bar bg-success" style="width: {{ 40 + $i }}%"></div>
-                                    <div class="progress-bar bg-danger" style="width: {{ 60 - $i }}%"></div>
+                                <strong>{{ $v['judul'] }}</strong>
+                                <div class="text-muted small mb-2">
+                                    Voting saat ini: <strong>Setuju: {{ $v['persen_setuju'] }}%</strong>, Tidak Setuju:
+                                    {{ $v['persen_tidak'] }}%
                                 </div>
-                                <small class="text-muted">Total suara: {{ 100 + $i * 3 }}</small>
+                                <div class="progress mb-2" style="height: 8px;">
+                                    <div class="progress-bar bg-success" style="width: {{ $v['persen_setuju'] }}%"></div>
+                                    <div class="progress-bar bg-danger" style="width: {{ $v['persen_tidak'] }}%"></div>
+                                </div>
+                                <small class="text-muted">Total suara: {{ $v['total'] }}</small>
                             </li>
-                        @endfor
+                        @empty
+                            <li class="list-group-item text-center text-muted">Belum ada data voting aktif.</li>
+                        @endforelse
                     </ul>
                 </div>
             </div>
         </div>
     </div>
-
-
-
-
-    <!-- Section: Ringkasan Revisi -->
-    <section id="revisi" class="section py-5 bg-white border-top">
-        <div class="container" data-aos="fade-up">
-            <div class="text-center mb-5">
-                <h2 class="fw-bold mb-3"><i class="bi bi-pencil-square text-primary me-2"></i>Ringkasan Revisi RUU</h2>
-                <p class="text-muted">Daftar RUU yang paling banyak diajukan revisi oleh masyarakat. Menandakan topik yang
-                    kontroversial atau penting.</p>
-            </div>
-
-            <div class="accordion shadow-sm rounded-4 overflow-hidden" id="accordionRevisi">
-
-                <!-- Example 1 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingOne">
-                        <button class="accordion-button d-flex justify-content-between align-items-center" type="button"
-                            data-bs-toggle="collapse" data-bs-target="#collapseOne">
-                            <span>
-                                <strong class="me-2">RUU Kesehatan Mental</strong>
-                                <span class="badge bg-warning text-dark">Topik: Psikologi</span>
-                            </span>
-                            <span class="text-muted small ms-auto">7 revisi - Terakhir: 21 Apr 2025</span>
-                        </button>
-                    </h2>
-                    <div id="collapseOne" class="accordion-collapse collapse show" data-bs-parent="#accordionRevisi">
-                        <div class="accordion-body small">
-                            <strong>Revisi Terakhir:</strong> Perlu ditambahkan pasal tentang perlindungan pasien rawat
-                            jalan.<br>
-                            <strong>Diajukan:</strong> 21 Apr 2025<br>
-                            <strong>Pengirim:</strong> Publik
-                            <div class="text-end mt-3">
-                                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#detailRevisiModal">Lihat Selengkapnya</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Example 2 -->
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="headingTwo">
-                        <button class="accordion-button collapsed d-flex justify-content-between align-items-center"
-                            type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
-                            <span>
-                                <strong class="me-2">RUU AI Nasional</strong>
-                                <span class="badge bg-info text-dark">Topik: Teknologi</span>
-                            </span>
-                            <span class="text-muted small ms-auto">5 revisi - Terakhir: 15 Apr 2025</span>
-                        </button>
-                    </h2>
-                    <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#accordionRevisi">
-                        <div class="accordion-body small">
-                            <strong>Revisi Terakhir:</strong> Tambahkan batasan terhadap pemanfaatan AI dalam militer.<br>
-                            <strong>Diajukan:</strong> 15 Apr 2025<br>
-                            <strong>Pengirim:</strong> Komunitas Digital
-                            <div class="text-end mt-3">
-                                <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
-                                    data-bs-target="#detailRevisiModal">Lihat Selengkapnya</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Button -->
-            <div class="text-center mt-4">
-                <button class="btn btn-primary px-4 rounded-pill" data-bs-toggle="modal"
-                    data-bs-target="#semuaRevisiModal">
-                    <i class="bi bi-list-ul me-1"></i> Telusuri Semua Revisi
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Modal: Detail Revisi -->
-    <div class="modal fade" id="detailRevisiModal" tabindex="-1" aria-labelledby="detailRevisiLabel"
-        aria-hidden="true">
-        <div class="modal-dialog modal-md modal-dialog-centered">
-            <div class="modal-content rounded-4">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold" id="detailRevisiLabel"><i
-                            class="bi bi-info-circle me-2 text-primary"></i>Detail Revisi RUU</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
-                <div class="modal-body small text-muted">
-                    <p><strong>Judul RUU:</strong> RUU Kesehatan Mental</p>
-                    <p><strong>Topik:</strong> Psikologi</p>
-                    <p><strong>Diajukan:</strong> 21 Apr 2025</p>
-                    <p><strong>Pengusul:</strong> Publik</p>
-                    <p><strong>Isi Usulan Revisi:</strong> <br>
-                        Menambahkan ketentuan pasal baru mengenai layanan psikologis berbasis komunitas, terutama untuk
-                        wilayah 3T (Tertinggal, Terdepan, Terluar).
-                    </p>
-                    <p><strong>Catatan Tambahan:</strong> Usulan akan ditinjau oleh komisi dalam 7 hari kerja.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal: Semua Revisi -->
-    <div class="modal fade" id="semuaRevisiModal" tabindex="-1" aria-labelledby="semuaRevisiLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-scrollable">
-            <div class="modal-content rounded-4">
-                <div class="modal-header">
-                    <h5 class="modal-title fw-bold" id="semuaRevisiLabel"><i
-                            class="bi bi-list-check me-2 text-primary"></i>Semua Usulan Revisi</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
-                <div class="modal-body">
-                    <!-- Search Box -->
-                    <div class="input-group mb-4 shadow-sm">
-                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
-                        <input type="text" class="form-control border-start-0"
-                            placeholder="Cari judul atau topik RUU…">
-                    </div>
-
-                    <!-- List Revisi -->
-                    <div class="row g-3">
-                        @for ($i = 1; $i <= 10; $i++)
-                            <div class="col-md-6">
-                                <div class="card border-0 shadow-sm h-100">
-                                    <div class="card-body small">
-                                        <span class="badge bg-warning text-dark mb-2">Topik: Kesehatan</span>
-                                        <h6 class="fw-semibold">RUU Layanan Kesehatan Digital {{ $i }}</h6>
-                                        <p class="text-muted">Revisi tentang pemerataan akses layanan kesehatan digital di
-                                            seluruh Indonesia.</p>
-                                        <ul class="list-unstyled small text-muted mb-0">
-                                            <li><i class="bi bi-calendar3 me-2"></i>Diajukan: 20 Apr 2025</li>
-                                            <li><i class="bi bi-person me-2"></i>Pengusul: Masyarakat</li>
-                                        </ul>
-                                        <div class="text-end mt-3">
-                                            <button class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
-                                                data-bs-target="#detailRevisiModal">
-                                                Detail
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        @endfor
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-
-
-
-
-
-
-
-
 
     <!-- Dana Publik -->
     <!-- Section: Dana Publik -->
@@ -503,21 +250,21 @@
             <div class="row mb-4">
                 <div class="col-md-4 mb-3">
                     <div class="bg-white rounded-4 shadow-sm p-4 text-center">
-                        <h6 class="text-muted small mb-2">Total Anggaran Bulan Ini</h6>
-                        <h5 class="mb-0 fw-bold">Rp 1.200.000.000</h5>
+                        <h6 class="text-muted small mb-2">Total Anggaran</h6>
+                        <h5 class="mb-0 fw-bold">Rp {{ number_format($totalAnggaran, 0, ',', '.') }}</h5>
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="bg-white rounded-4 shadow-sm p-4 text-center">
-                        <h6 class="text-muted small mb-2">Sisa Dana</h6>
-                        <h5 class="mb-0 text-success fw-bold">Rp 250.000.000</h5>
+                        <h6 class="text-muted small mb-2">Jumlah Program</h6>
+                        <h5 class="mb-0 text-success fw-bold">{{ $jumlahProgram }} kegiatan</h5>
                     </div>
                 </div>
                 <div class="col-md-4 mb-3">
                     <div class="bg-white rounded-4 shadow-sm p-4 text-center">
-                        <h6 class="text-muted small mb-2">Penggunaan Terakhir</h6>
-                        <p class="mb-0 text-dark">Pengadaan Sistem Digital RUU</p>
-                        <small class="text-muted">24 April 2025</small>
+                        <p class="mb-0 text-dark">{{ $penggunaanTerakhir->nama_program ?? '-' }}</p>
+                        <small
+                            class="text-muted">{{ \Carbon\Carbon::parse($penggunaanTerakhir->tanggal)->translatedFormat('d F Y') }}</small>
                     </div>
                 </div>
             </div>
@@ -534,33 +281,20 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>21-April-2025</td>
-                            <td>Workshop Legislasi Mahasiswa</td>
-                            <td>Rp 75.000.000</td>
-                            <td class="text-end">
-                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                    data-bs-target="#detailDanaModal">Lihat Detail</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>18-April-2025</td>
-                            <td>Sosialisasi Kampus</td>
-                            <td>Rp 50.000.000</td>
-                            <td class="text-end">
-                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                    data-bs-target="#detailDanaModal">Lihat Detail</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>15-April-2025</td>
-                            <td>Pengembangan Sistem</td>
-                            <td>Rp 100.000.000</td>
-                            <td class="text-end">
-                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                    data-bs-target="#detailDanaModal">Lihat Detail</button>
-                            </td>
-                        </tr>
+                        @foreach ($alokasiTop3 as $item)
+                            <tr>
+                                <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d-M-Y') }}</td>
+                                <td>{{ $item->nama_program }}</td>
+                                <td>Rp {{ number_format($item->jumlah, 0, ',', '.') }}</td>
+                                <td class="text-end">
+                                    <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                        data-bs-target="#detailDanaModal" data-alokasi-id="{{ $item->tx_id }}"
+                                        data-nama="{{ $item->nama_program }}">
+                                        Verifikasi
+                                    </button>
+                                </td>
+                            </tr>
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -575,25 +309,18 @@
         </div>
     </section>
 
-    <!-- Modal: Detail Alokasi Dana -->
+    <!-- Modal: Verifikasi Blockchain Dana -->
     <div class="modal fade" id="detailDanaModal" tabindex="-1" aria-labelledby="detailDanaModalLabel"
         aria-hidden="true">
-        <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Detail Alokasi Dana</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <h5 class="modal-title" id="detailDanaModalLabel">Memuat Data...</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
-                <div class="modal-body small text-muted">
-                    <p><strong>Kegiatan:</strong> Workshop Legislasi Mahasiswa</p>
-                    <p><strong>Tanggal:</strong> 21 April 2025</p>
-                    <p><strong>Jumlah:</strong> Rp 75.000.000</p>
-                    <p><strong>Status:</strong> <span class="badge bg-warning">Berlangsung</span></p>
-                    <hr>
-                    <p><strong>Rincian:</strong> Biaya mencakup pemateri, akomodasi, dan konsumsi 150 peserta selama 2 hari
-                        kegiatan workshop.</p>
-                    <p><strong>Catatan Tambahan:</strong> Kegiatan diselenggarakan oleh Kementerian Hukum Mahasiswa
-                        bekerjasama dengan DPR RI.</p>
+                <div class="modal-body" id="dana-blockchain-container"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 </div>
             </div>
         </div>
@@ -618,23 +345,27 @@
 
                     <!-- List Dana -->
                     <div class="row g-3">
-                        @for ($i = 1; $i <= 10; $i++)
+                        @foreach ($alokasiList as $item)
                             <div class="col-md-6">
                                 <div class="card border-0 shadow-sm">
                                     <div class="card-body small">
-                                        <h6 class="fw-bold mb-1">Kegiatan Sosialisasi #{{ $i }}</h6>
-                                        <p class="text-muted mb-2 small">Tanggal: 10-April-2025</p>
+                                        <h6 class="fw-bold mb-1">{{ $item->nama_program }}</h6>
+                                        <p class="text-muted mb-2 small">Tanggal:
+                                            {{ \Carbon\Carbon::parse($item->tanggal)->format('d-M-Y') }}</p>
                                         <p class="text-muted mb-2 small">Jumlah: Rp
-                                            {{ number_format(50000000 + $i * 5000000, 0, ',', '.') }}</p>
+                                            {{ number_format($item->jumlah, 0, ',', '.') }}</p>
                                         <div class="d-flex justify-content-between align-items-center">
                                             <span class="badge bg-secondary">Selesai</span>
-                                            <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal"
-                                                data-bs-target="#detailDanaModal">Lihat Detail</button>
+                                            <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                                data-bs-target="#detailDanaModal" data-alokasi-id="{{ $item->tx_id }}"
+                                                data-nama="{{ $item->nama_program }}">
+                                                Verifikasi
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        @endfor
+                        @endforeach
                     </div>
                 </div>
             </div>
@@ -673,6 +404,104 @@
 
 @push('scripts')
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('detailDanaModal');
+
+            modal.addEventListener('show.bs.modal', function(event) {
+                const btn = event.relatedTarget;
+                const body = modal.querySelector('.modal-body');
+
+                const alokasiId = btn.dataset.alokasiId;
+                const namaProgram = btn.dataset.nama;
+
+                document.getElementById('detailDanaModalLabel').textContent = 'Verifikasi Blockchain: ' +
+                    namaProgram;
+
+                body.innerHTML = `
+            <div class="d-flex justify-content-center my-4">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <strong class="ms-2">Mengambil data dari Blockchain...</strong>
+            </div>
+         `;
+
+                fetch(`/audit/alokasi-dana/${alokasiId}`)
+                    .then(response => {
+                        if (!response.ok) throw response;
+                        return response.json();
+                    })
+                    .then(data => {
+                        const html = `
+                    <p class="text-muted small">Data ini bersumber langsung dari blockchain ledger.</p>
+                    <table class="table table-bordered table-sm">
+                        <tr>
+                            <th>Program</th>
+                            <td>${data.NamaProgram || '-'}</td>
+                        </tr>
+                        <tr>
+                            <th>Tanggal</th>
+                            <td>${data.Tanggal ? new Date(data.Tanggal).toLocaleDateString('id-ID') : '-'}</td>
+                        </tr>
+                        <tr>
+                            <th>Jumlah</th>
+                            <td>Rp ${Number(data.Jumlah || 0).toLocaleString('id-ID')}</td>
+                        </tr>
+                        <tr>
+                            <th>Keterangan</th>
+                            <td>${data.Keterangan || '-'}</td>
+                        </tr>
+                        <tr>
+                            <th>TX ID</th>
+                            <td><code class="text-monospace small">${data.ID || '-'}</code></td>
+                        </tr>
+                        <tr>
+                            <th>Waktu Pencatatan</th>
+                            <td>${data.TimestampPencatatan ? new Date(data.TimestampPencatatan).toLocaleString('id-ID') : '-'}</td>
+                        </tr>
+                    </table>
+                `;
+                        body.innerHTML = html;
+                    })
+                    .catch(async err => {
+                        let msg = 'Gagal memuat data.';
+                        if (err.json) {
+                            const res = await err.json();
+                            msg = res.message || msg;
+                        }
+                        body.innerHTML = `
+                    <div class="alert alert-danger text-center">
+                        <h6>Gagal Memuat</h6>
+                        <p>${msg}</p>
+                    </div>
+                `;
+                    });
+            });
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('detailDanaModal');
+
+            modal.addEventListener('show.bs.modal', function(event) {
+                const btn = event.relatedTarget;
+                const nama = btn.getAttribute('data-nama');
+                const tanggal = btn.getAttribute('data-tanggal');
+                const jumlah = btn.getAttribute('data-jumlah');
+                const keterangan = btn.getAttribute('data-keterangan');
+
+                const html = `
+            <p><strong>Kegiatan:</strong> ${nama}</p>
+            <p><strong>Tanggal:</strong> ${tanggal}</p>
+            <p><strong>Jumlah:</strong> ${jumlah}</p>
+            <hr>
+            <p><strong>Keterangan:</strong> ${keterangan}</p>
+            `;
+
+                modal.querySelector('#modalDanaBody').innerHTML = html;
+            });
+        });
+
         $(document).ready(function() {
             // Event listener untuk semua tombol dengan class '.view-blockchain-btn'
             $('.view-blockchain-btn').on('click', function() {

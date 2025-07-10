@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AlokasiDana;
 use Illuminate\Http\Request;
 use App\Models\RUU; // Jangan lupa import model RUU
 
@@ -23,8 +24,47 @@ class PublicDashboardController extends Controller
             $query->where('judul', 'like', '%' . $request->keyword . '%');
         }
 
-        $ruus = $query->latest('updated_at')->paginate(8);
+        $votingSummary = RUU::with('voting')
+            ->where('status', 'VOTING')
+            ->get()
+            ->map(function ($ruu) {
+                $setuju = $ruu->voting->where('pilihan', 'SETUJU')->count();
+                $tidak = $ruu->voting->where('pilihan', 'TIDAK_SETUJU')->count();
+                $total = $setuju + $tidak;
 
-        return view('dashboard.publik', compact('ruus'));
+                return [
+                    'judul' => $ruu->judul,
+                    'deskripsi' => $ruu->deskripsi,
+                    'setuju' => $setuju,
+                    'tidak' => $tidak,
+                    'total' => $total,
+                    'persen_setuju' => $total > 0 ? round(($setuju / $total) * 100) : 0,
+                    'persen_tidak' => $total > 0 ? round(($tidak / $total) * 100) : 0,
+                ];
+            })
+            ->sortByDesc('total')
+            ->values();
+
+        $votingTop3 = $votingSummary->take(3);
+
+        $ruus = $query->latest('updated_at')->paginate(4);
+
+        $alokasiList = AlokasiDana::latest('tanggal')->get();
+        $alokasiTop3 = $alokasiList->take(3);
+
+        $totalAnggaran = $alokasiList->sum('jumlah');
+        $jumlahProgram = $alokasiList->count();
+        $penggunaanTerakhir = $alokasiList->first();
+
+        return view('dashboard.publik', compact(
+            'ruus',
+            'votingTop3',
+            'votingSummary',
+            'alokasiList',
+            'alokasiTop3',
+            'totalAnggaran',
+            'jumlahProgram',
+            'penggunaanTerakhir'
+        ));
     }
 }
