@@ -54,4 +54,18 @@ class BlockchainAuditController extends Controller
             ], 504); // 504 Gateway Timeout
         }
     }
+
+    public function getAlokasiDana($alokasiId)
+    {
+        $apiUrl = 'http://localhost:3000/api/alokasi-dana/' . $alokasiId;
+        try {
+            $response = Http::withoutVerifying()->timeout(10)->get($apiUrl);
+            if ($response->successful()) {
+                return response()->json($response->json());
+            }
+            return response()->json(['error' => true, 'message' => 'Data tidak ditemukan di ledger.'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => true, 'message' => 'Tidak dapat terhubung ke server blockchain.'], 504);
+        }
+    }
 }

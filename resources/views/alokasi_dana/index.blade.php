@@ -81,8 +81,9 @@
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     @else
-                                        <button class="btn btn-info btn-sm" data-bs-toggle="tooltip"
-                                            title="ID Transaksi di Blockchain: {{ $item->tx_id }}">
+                                        <button class="btn btn-info btn-sm view-dana-detail-btn" data-bs-toggle="modal"
+                                            data-bs-target="#alokasiDetailModal" data-alokasi-id="{{ $item->tx_id }}"
+                                            data-nama-program="{{ $item->nama_program }}">
                                             <i class="fas fa-info-circle"></i> Detail
                                         </button>
                                     @endif
@@ -115,6 +116,25 @@
             <textarea name="keterangan" id="keterangan" rows="3" class="form-control"></textarea>
         </div>
     </x-modal-create>
+
+    <div class="modal fade" id="alokasiDetailModal" tabindex="-1" aria-labelledby="alokasiDetailModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="alokasiDetailModalLabel">Memuat Data...</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="alokasi-data-container">
+                    {{-- Konten akan diisi oleh JavaScript --}}
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
 @endsection
 
 @push('scripts')
@@ -182,6 +202,47 @@
             });
 
             handleAjaxFormSubmit('formAlokasi');
+
+            $('.view-dana-detail-btn').on('click', function() {
+                const alokasiId = $(this).data('alokasi-id');
+                const namaProgram = $(this).data('nama-program');
+                const modalContainer = $('#alokasi-data-container');
+                const modalTitle = $('#alokasiDetailModalLabel');
+
+                modalTitle.text('Detail Blockchain: ' + namaProgram);
+                modalContainer.html(
+                    '<div class="text-center my-5"><div class="spinner-border"></div><p class="mt-2">Memuat...</p></div>'
+                );
+
+                $.ajax({
+                    url: `/audit/alokasi-dana/${alokasiId}`,
+                    type: 'GET',
+                    success: function(data) {
+                        let contentHtml = `
+                            <p class="text-muted small">Data berikut diambil langsung dari ledger blockchain.</p>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item d-flex justify-content-between"><strong>ID Transaksi:</strong> <code class="text-monospace small">${data.ID}</code></li>
+                                <li class="list-group-item d-flex justify-content-between"><strong>Nama Program:</strong> ${data.NamaProgram}</li>
+                                <li class="list-group-item d-flex justify-content-between"><strong>Jumlah:</strong> Rp ${Number(data.Jumlah).toLocaleString('id-ID')}</li>
+                                <li class="list-group-item d-flex justify-content-between"><strong>Tanggal Alokasi:</strong> ${new Date(data.Tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' })}</li>
+                                <li class="list-group-item d-flex justify-content-between"><strong>Dicatat di Blockchain:</strong> ${new Date(data.TimestampPencatatan).toLocaleString('id-ID')}</li>
+                            </ul>
+                            <div class="mt-3">
+                                <strong>Keterangan:</strong>
+                                <p class="mt-1 p-3 bg-light rounded">${data.Keterangan}</p>
+                            </div>
+                        `;
+                        modalContainer.html(contentHtml);
+                    },
+                    error: function(jqXHR) {
+                        const errorMsg = jqXHR.responseJSON?.message || 'Gagal memuat data.';
+                        modalContainer.html('<div class="alert alert-danger text-center">' +
+                            errorMsg +
+                            '</div>');
+                    }
+                });
+            });
+
         });
     </script>
 @endpush

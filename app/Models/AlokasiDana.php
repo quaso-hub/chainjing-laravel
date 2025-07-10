@@ -8,5 +8,5 @@ class AlokasiDana extends Model
 {
     protected $table = 'alokasi_dana';
 
-    protected $fillable = ['nama_program', 'jumlah', 'tanggal', 'keterangan'];
+    protected $fillable = ['nama_program', 'jumlah', 'tanggal', 'keterangan', 'status_blockchain', 'tx_id'];
 }
