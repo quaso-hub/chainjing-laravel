@@ -290,7 +290,7 @@
                                     <button class="btn btn-outline-primary" data-bs-toggle="modal"
                                         data-bs-target="#detailDanaModal" data-alokasi-id="{{ $item->tx_id }}"
                                         data-nama="{{ $item->nama_program }}">
-                                        Verifikasi
+                                        <i class="bi-shield-check"></i> Verifikasi Blockchain
                                     </button>
                                 </td>
                             </tr>
@@ -359,7 +359,7 @@
                                             <button class="btn btn-outline-primary" data-bs-toggle="modal"
                                                 data-bs-target="#detailDanaModal" data-alokasi-id="{{ $item->tx_id }}"
                                                 data-nama="{{ $item->nama_program }}">
-                                                Verifikasi
+                                                <i class="bi-shield-check"></i> Verifikasi Blockchain
                                             </button>
                                         </div>
                                     </div>
@@ -396,10 +396,6 @@
 
 
 @endsection
-
-
-
-
 
 
 @push('scripts')
