@@ -8,7 +8,6 @@
                 <h4 class="page-title">Manajemen Alokasi Dana</h4>
                 <nav aria-label="breadcrumb" class="d-inline-block ms-2">
                     <ol class="breadcrumb bg-transparent p-0 m-0">
-                        {{-- Sesuaikan dengan dashboard Bendahara --}}
                         <li class="breadcrumb-item"><a href="{{ route('dashboard.anggota') }}"><i class="fas fa-home"></i>
                                 Dashboard</a></li>
                         <li class="breadcrumb-item active" aria-current="page">Alokasi Dana</li>
@@ -31,8 +30,8 @@
                             <th>Nama Program</th>
                             <th>Jumlah</th>
                             <th>Tanggal</th>
-                            <th>Status Blockchain</th> {{-- KOLOM BARU --}}
-                            <th width="200">Aksi</th> {{-- Lebarkan kolom aksi --}}
+                            <th>Status Blockchain</th>
+                            <th width="200">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -43,7 +42,6 @@
                                 <td>Rp {{ number_format($item->jumlah, 0, ',', '.') }}</td>
                                 <td>{{ \Carbon\Carbon::parse($item->tanggal)->translatedFormat('d M Y') }}</td>
 
-                                {{-- TAMPILKAN STATUS BLOCKCHAIN --}}
                                 <td>
                                     @if ($item->status_blockchain == 'recorded')
                                         <span class="badge bg-success">
@@ -56,21 +54,20 @@
                                     @endif
                                 </td>
 
-                                {{-- TAMPILKAN AKSI DINAMIS --}}
                                 <td>
                                     @if ($item->status_blockchain == 'pending')
-                                        {{-- Tombol untuk mencatat ke blockchain --}}
-                                        <form action="{{ route('alokasi_dana.record', $item->id) }}" method="POST"
-                                            class="d-inline-block"
-                                            onsubmit="return confirm('Anda yakin ingin mencatat data ini ke blockchain? Aksi ini tidak dapat dibatalkan.');">
+                                        <form id="record-form-{{ $item->id }}"
+                                            action="{{ route('alokasi_dana.record', $item->id) }}" method="POST"
+                                            class="d-inline-block">
                                             @csrf
-                                            <button type="submit" class="btn btn-success btn-sm" data-bs-toggle="tooltip"
+                                            <button type="button" class="btn btn-success btn-sm record-btn"
+                                                data-form-id="record-form-{{ $item->id }}" data-bs-toggle="tooltip"
                                                 title="Catat ke Blockchain">
                                                 <i class="fas fa-shield-alt"></i> Catat
                                             </button>
                                         </form>
 
-                                        {{-- Tombol Edit & Delete hanya untuk data pending --}}
+
                                         <button class="btn btn-warning btn-sm edit-alokasi-btn"
                                             data-id="{{ $item->id }}" data-nama_program="{{ $item->nama_program }}"
                                             data-jumlah="{{ $item->jumlah }}" data-tanggal="{{ $item->tanggal }}"
@@ -84,7 +81,6 @@
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     @else
-                                        {{-- Jika sudah tercatat, tampilkan ID Transaksi --}}
                                         <button class="btn btn-info btn-sm" data-bs-toggle="tooltip"
                                             title="ID Transaksi di Blockchain: {{ $item->tx_id }}">
                                             <i class="fas fa-info-circle"></i> Detail
@@ -99,7 +95,6 @@
         </div>
     </div>
 
-    {{-- Modal Create/Edit tidak perlu diubah, sudah bagus --}}
     <x-modal-create id="modalAlokasiDana" labelledby="modalAlokasiLabel" title="Proposal Alokasi Dana" formId="formAlokasi"
         action="{{ route('alokasi_dana.store') }}" submitText="Simpan">
         <input type="hidden" id="alokasi-id">
@@ -135,8 +130,28 @@
                     url: '//cdn.datatables.net/plug-ins/1.13.4/i18n/id.json'
                 }
             });
+            $('.record-btn').click(function(e) {
+                e.preventDefault()
 
-            // ... (sisa script untuk modal tambah, edit, delete tidak perlu diubah) ...
+                const formId = $(this).data('form-id');
+                const form = $('#' + formId);
+
+                Swal.fire({
+                    title: 'Anda Yakin?',
+                    text: "Data ini akan dicatat secara permanen di blockchain dan tidak dapat dibatalkan!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#28a745',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, Catat ke Blockchain!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
+                    }
+                })
+            });
+
             // Tambah Alokasi
             $('#modalAlokasiDana').on('show.bs.modal', function() {
                 $('#formAlokasi').trigger('reset');
