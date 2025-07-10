@@ -72,6 +72,13 @@ Route::middleware(['auth', CekJabatan::class . ':1,4'])->group(function () {
     Route::delete('ruu/{ruu}', [RUUController::class, 'destroy'])->name('ruu.destroy');
 });
 
+// BENDAHARA
+Route::middleware(['auth', CekJabatan::class . ':5'])->group(function () {
+    // HANYA UPDATE DAN DELETE YANG KHUSUS ADMIN & PIMPINAN
+    Route::resource('alokasi_dana', AlokasiDanaController::class);
+    Route::post('alokasi_dana/{alokasi_dana}/record', [AlokasiDanaController::class, 'recordToBlockchain'])->name('alokasi_dana.record');
+});
+
 // -------------------- ADMIN + ANGGOTA + PIMPINAN + BENDAHARA (jabatan_id = 1,2,4,5) --------------------
 Route::middleware(['auth', CekJabatan::class . ':1,2,4,5'])->group(function () {
     Route::get('ruu', [RUUController::class, 'index'])->name('ruu.index');

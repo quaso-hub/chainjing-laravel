@@ -98,6 +98,15 @@
                 <p>Riwayat Aktivitas</p>
             </a>
         </li>
+        @if (in_array(Auth::user()->jabatan_id, [5]))
+            {{-- 4=Pimpinan, 5=Bendahara --}}
+            <li class="nav-item {{ $activeLike('ruu') }}">
+                <a href="{{ route('alokasi_dana.index') }}">
+                    <i class="fas fa-gavel"></i>
+                    <p>Alokasi Dana</p>
+                </a>
+            </li>
+        @endif
     @endif
 
     {{-- Menu Khusus Publik (Jabatan 3) --}}

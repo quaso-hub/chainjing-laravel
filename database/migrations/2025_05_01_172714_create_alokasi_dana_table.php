@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('tanggal');
             $table->text('keterangan');
             $table->timestamps();
+
         });
     }
 
