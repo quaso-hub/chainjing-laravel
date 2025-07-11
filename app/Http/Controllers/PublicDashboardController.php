@@ -49,7 +49,7 @@ class PublicDashboardController extends Controller
 
         $ruus = $query->latest('updated_at')->paginate(4);
 
-        $alokasiList = AlokasiDana::latest('tanggal')->get();
+        $alokasiList = AlokasiDana::where('status_blockchain', 'recorded')->latest('tanggal')->get();
         $alokasiTop3 = $alokasiList->take(3);
 
         $totalAnggaran = $alokasiList->sum('jumlah');
