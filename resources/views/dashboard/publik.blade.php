@@ -248,23 +248,35 @@
 
             <!-- Statistik -->
             <div class="row mb-4">
+                <!-- Total Anggaran -->
                 <div class="col-md-4 mb-3">
                     <div class="bg-white rounded-4 shadow-sm p-4 text-center">
                         <h6 class="text-muted small mb-2">Total Anggaran</h6>
-                        <h5 class="mb-0 fw-bold">Rp {{ number_format($totalAnggaran, 0, ',', '.') }}</h5>
+                        <h5 class="mb-0 fw-bold">
+                            Rp {{ isset($totalAnggaran) ? number_format($totalAnggaran, 0, ',', '.') : '0' }}
+                        </h5>
                     </div>
                 </div>
+
+                <!-- Jumlah Program -->
                 <div class="col-md-4 mb-3">
                     <div class="bg-white rounded-4 shadow-sm p-4 text-center">
                         <h6 class="text-muted small mb-2">Jumlah Program</h6>
-                        <h5 class="mb-0 text-success fw-bold">{{ $jumlahProgram }} kegiatan</h5>
+                        <h5 class="mb-0 text-success fw-bold">
+                            {{ isset($jumlahProgram) ? $jumlahProgram : 0 }} kegiatan
+                        </h5>
                     </div>
                 </div>
+
+                <!-- Penggunaan Terakhir -->
                 <div class="col-md-4 mb-3">
                     <div class="bg-white rounded-4 shadow-sm p-4 text-center">
-                        <p class="mb-0 text-dark">{{ $penggunaanTerakhir->nama_program ?? '-' }}</p>
-                        <small
-                            class="text-muted">{{ \Carbon\Carbon::parse($penggunaanTerakhir->tanggal)->translatedFormat('d F Y') }}</small>
+                        <p class="mb-0 text-dark">
+                            {{ $penggunaanTerakhir->nama_program ?? '-' }}
+                        </p>
+                        <small class="text-muted">
+                            {{ $penggunaanTerakhir && $penggunaanTerakhir->tanggal ? \Carbon\Carbon::parse($penggunaanTerakhir->tanggal)->translatedFormat('d F Y') : '-' }}
+                        </small>
                     </div>
                 </div>
             </div>
@@ -281,7 +293,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($alokasiTop3 as $item)
+                        @forelse ($alokasiTop3 as $item)
                             <tr>
                                 <td>{{ \Carbon\Carbon::parse($item->tanggal)->format('d-M-Y') }}</td>
                                 <td>{{ $item->nama_program }}</td>
@@ -294,7 +306,12 @@
                                     </button>
                                 </td>
                             </tr>
-                        @endforeach
+                        @empty
+                            <tr>
+                                <td colspan="4" class="text-center text-muted">Belum ada data alokasi dana yang
+                                    tercatat.</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>
@@ -345,7 +362,7 @@
 
                     <!-- List Dana -->
                     <div class="row g-3">
-                        @foreach ($alokasiList as $item)
+                        @forelse ($alokasiList as $item)
                             <div class="col-md-6">
                                 <div class="card border-0 shadow-sm">
                                     <div class="card-body small">
@@ -365,7 +382,11 @@
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+                        @empty
+                            <div class="col-12 text-center text-muted">
+                                <em>Tidak ada data alokasi dana ditemukan.</em>
+                            </div>
+                        @endforelse
                     </div>
                 </div>
             </div>
