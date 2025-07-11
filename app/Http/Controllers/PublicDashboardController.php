@@ -29,7 +29,7 @@ class PublicDashboardController extends Controller
             ->get()
             ->map(function ($ruu) {
                 $setuju = $ruu->voting->where('pilihan', 'SETUJU')->count();
-                $tidak = $ruu->voting->where('pilihan', 'TIDAK_SETUJU')->count();
+                $tidak = $ruu->voting->where('pilihan', 'TOLAK')->count();
                 $total = $setuju + $tidak;
 
                 return [
